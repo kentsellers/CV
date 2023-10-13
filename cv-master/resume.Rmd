@@ -1,0 +1,169 @@
+---
+title: Kent's Resume"
+author: Kent Sellers
+date: "`r Sys.Date()`"
+output:
+  pagedown::html_resume:
+    # set it to true for a self-contained HTML page but it'll take longer to render
+    css: ['css/custom_resume.css', 'css/styles.css', 'resume']
+    self_contained: true
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  results='asis', 
+  echo = FALSE
+)
+library(tidyverse)
+library(glue)
+setwd('C:/Users/wsellers/OneDrive - State of Indiana/My Docs/R/CV/cv-master')
+
+# Set this to true to have links turned into footnotes at the end of the document
+PDF_EXPORT <- TRUE
+
+# Holds all the links that were inserted for placement at the end
+links <- c()
+
+source('parsing_functions.R')
+
+
+# First let's get the data, filtering to only the items tagged as
+# Resume items
+position_data <- read_csv('positions.csv') %>% 
+  filter(in_resume) %>% 
+  mutate(
+    # Build some custom sections by collapsing others
+    section = case_when(
+      section %in% c('research_positions', 'industry_positions') ~ 'positions', 
+      section %in% c('data_science_writings') ~ 'writings',
+      TRUE ~ section
+    )
+  ) 
+
+```
+
+
+Aside
+================================================================================
+
+
+![logo](Kent_001 profile pic.jpg){width=100%}
+
+Contact {#contact}
+--------------------------------------------------------------------------------
+
+
+
+- <i class="fa fa-envelope"></i> wksellers32@gmail.com
+- <i class="fa fa-linkedin"></i> [kentsellers](https://www.linkedin.com/in/kentsellers)
+- <i class="fa fa-phone"></i> +1 (260) 267-6603
+
+
+
+
+
+Relevant Skills {#skills}
+--------------------------------------------------------------------------------
+
+
+```{r, eval=TRUE}
+skills <- tribble(
+  ~skill,               ~level,
+  "Workforce Data Sources",           5,
+  "Data Analysis",                    5,
+  "Independent Research",             5,
+  "Data Viz (Tableau/PowerBI)",        5,
+  "Time Series",                      4.5,
+  "Modeling",                         4.5,
+  "R",                                4,
+  "SQL",                              3.5
+)
+build_skill_bars(skills)
+```
+
+
+
+
+
+Disclaimer {#disclaimer}
+--------------------------------------------------------------------------------
+
+Made w/ [**pagedown**](https://github.com/rstudio/pagedown). 
+
+Source code: [github.com/kentsellers/cv](https://github.com/kentsellers/cv).
+
+Last updated on `r Sys.Date()`.
+
+
+
+
+Main
+================================================================================
+
+Kent Sellers {#title}
+--------------------------------------------------------------------------------
+
+```{r}
+intro_text <- "I am a statistician that attempts to blend my two passions: leadership and data. I have experience doing data analysis end to end. From data retreival, to data preparation (tidying, reshaping), to exploratory data analysis (visualizations, descriptive statistics), to predictive modeling (machine learning/statistical modeling). I also have a strong background in managing teams as I oversee the data analysis. Once the analysis is complete, I can collaborate with my stakeholders to help their organizations make well-informed and comprehensive decisions."
+
+cat(sanitize_links(intro_text))
+```
+
+
+
+
+
+Work Experience {data-icon=suitcase}
+--------------------------------------------------------------------------------
+
+```{r}
+position_data %>% print_section('positions')
+```
+
+
+
+
+
+Education {data-icon=graduation-cap data-concise=true}
+--------------------------------------------------------------------------------
+
+```{r}
+position_data %>% print_section('education')
+```
+
+
+
+
+
+
+Certification {data-icon=medal data-concise=true}
+--------------------------------------------------------------------------------
+
+```{r}
+position_data %>% print_section('certification')
+```
+
+
+
+
+
+Sample Publications {data-icon=book data-concise=true}
+--------------------------------------------------------------------------------
+
+```{r}
+position_data %>% print_section('publications')
+```
+
+
+
+
+
+Sample Featured Contributions {data-icon=newspaper data-concise=true}
+--------------------------------------------------------------------------------
+
+```{r}
+position_data %>% print_section('contributions')
+```
